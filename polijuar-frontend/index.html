@@ -1,16 +1,176 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
+    <!-- ── Meta básicos ─────────────────────────────────────────────────── -->
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Polijuar Descartables — Gestión</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- ── Título y descripción SEO ────────────────────────────────────── -->
+    <title>Polijuar Descartables — Sistema de Gestión</title>
+    <meta name="description" content="Sistema de gestión interna de productos y stock para Polijuar Descartables. Más de 25 años de trayectoria en el rubro de descartables." />
+    <meta name="author" content="Polijuar Descartables" />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <!-- ── Open Graph (WhatsApp, redes sociales) ────────────────────────── -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Polijuar Descartables — Gestión de Productos" />
+    <meta property="og:description" content="Sistema de gestión de inventario y productos para Polijuar Descartables." />
+    <meta property="og:locale" content="es_AR" />
+
+    <!-- ── Favicon ──────────────────────────────────────────────────────── -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- ── Tipografías Google Fonts ─────────────────────────────────────── -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- ── Estilos de la pantalla de carga ──────────────────────────────── -->
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        background: #0f1117;
+        color: #e8eaf0;
+        font-family: 'DM Sans', sans-serif;
+        min-height: 100vh;
+      }
+
+      /* Pantalla de carga inicial */
+      #app-loader {
+        position: fixed;
+        inset: 0;
+        background: #0f1117;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        z-index: 9999;
+        transition: opacity 0.4s ease, visibility 0.4s ease;
+      }
+
+      #app-loader.hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .loader-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        animation: loaderFadeIn 0.5s ease;
+      }
+
+      .loader-logo svg {
+        filter: drop-shadow(0 0 12px rgba(245, 166, 35, 0.4));
+      }
+
+      .loader-brand {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .loader-brand-name {
+        font-family: 'Syne', sans-serif;
+        font-size: 22px;
+        font-weight: 800;
+        color: #e8eaf0;
+        line-height: 1.1;
+      }
+
+      .loader-brand-sub {
+        font-size: 11px;
+        color: #7a849e;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+      }
+
+      /* Barra de progreso animada */
+      .loader-bar-wrap {
+        width: 200px;
+        height: 3px;
+        background: #2a3045;
+        border-radius: 99px;
+        overflow: hidden;
+        animation: loaderFadeIn 0.5s ease 0.2s both;
+      }
+
+      .loader-bar {
+        height: 100%;
+        width: 40%;
+        background: linear-gradient(90deg, #f5a623, #ffcf72);
+        border-radius: 99px;
+        animation: loaderSlide 1.2s ease-in-out infinite;
+      }
+
+      .loader-text {
+        font-size: 12px;
+        color: #7a849e;
+        animation: loaderFadeIn 0.5s ease 0.3s both;
+      }
+
+      @keyframes loaderFadeIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes loaderSlide {
+        0%   { transform: translateX(-100%); }
+        50%  { transform: translateX(250%); }
+        100% { transform: translateX(-100%); }
+      }
+    </style>
   </head>
+
   <body>
+    <!-- ── Pantalla de carga (se oculta cuando React monta el componente) ── -->
+    <div id="app-loader" role="status" aria-label="Cargando la aplicación">
+      <div class="loader-logo">
+        <!-- Ícono de caja/paquete en SVG -->
+        <svg width="40" height="40" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#181c27"/>
+          <path d="M16 4L28 10V22L16 28L4 22V10L16 4Z" stroke="#f5a623" stroke-width="1.8" stroke-linejoin="round"/>
+          <path d="M4 10L16 16L28 10" stroke="#f5a623" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="16" y1="16" x2="16" y2="28" stroke="#f5a623" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M10 7L22 13" stroke="#f5a62360" stroke-width="1" stroke-linecap="round"/>
+        </svg>
+        <div class="loader-brand">
+          <span class="loader-brand-name">Polijuar</span>
+          <span class="loader-brand-sub">Descartables</span>
+        </div>
+      </div>
+      <div class="loader-bar-wrap">
+        <div class="loader-bar"></div>
+      </div>
+      <p class="loader-text">Cargando el sistema…</p>
+    </div>
+
+    <!-- ── Punto de montaje de React ────────────────────────────────────── -->
     <div id="root"></div>
+
+    <!-- ── Script para ocultar el loader cuando React esté listo ─────────── -->
+    <script>
+      // Observa cuando React inserta contenido en #root y oculta el loader
+      const observer = new MutationObserver(() => {
+        const root = document.getElementById('root');
+        if (root && root.children.length > 0) {
+          const loader = document.getElementById('app-loader');
+          if (loader) {
+            loader.classList.add('hidden');
+            setTimeout(() => loader.remove(), 450);
+          }
+          observer.disconnect();
+        }
+      });
+      observer.observe(document.getElementById('root'), { childList: true });
+    </script>
+
+    <!-- ── Módulo principal de React/Vite ───────────────────────────────── -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
