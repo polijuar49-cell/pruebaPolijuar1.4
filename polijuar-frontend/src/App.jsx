@@ -323,7 +323,7 @@ const S = {
   statL:       { fontSize:10, color:'#7a849e', textTransform:'uppercase', letterSpacing:'.05em' },
 
   main:        { flex:1, display:'flex', flexDirection:'column', overflow:'hidden' },
-  toolbar:     { display:'flex', alignItems:'center', justifyContent:'space-between', padding:'20px 28px 0' },
+  toolbar:     { display:'flex', alignItems:'center', justifycontent:'space-between', padding:'20px 28px 0' },
   toolbarLeft: { display:'flex', alignItems:'baseline', gap:12 },
   pageTitle:   { fontFamily:'Syne,sans-serif', fontSize:24, fontWeight:800, color:'#e8eaf0' },
   totalBadge:  { fontSize:12, color:'#7a849e' },
