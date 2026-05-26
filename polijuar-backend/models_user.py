@@ -1,15 +1,13 @@
-from sqlalchemy import Column, Integer, String, Boolean
-from sqlalchemy.orm import relationship
-from database import Base
+from pydantic import BaseModel, Field, ConfigDict
 
+class UserBase(BaseModel):
+    username: str = Field(..., max_length=150, examples=["juan"])
+    is_active: bool = True
 
-class User(Base):
-    __tablename__ = "users"
+    model_config = ConfigDict(from_attributes=True)
 
-    id = Column(Integer, primary_key=True, index=True)
-    username = Column(String(150), unique=True, nullable=False, index=True)
-    hashed_password = Column(String(255), nullable=False)
-    is_active = Column(Boolean, default=True)
+class UserCreate(UserBase):
+    password: str = Field(..., min_length=6, examples=["secret123"])
 
-    # relationship to other models if needed
-    # productos = relationship("Producto", back_populates="owner")
+class UserResponse(UserBase):
+    id: int
