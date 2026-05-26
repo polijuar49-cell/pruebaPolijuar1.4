@@ -7,7 +7,7 @@ moving files to keep the existing project layout untouched.
 """
 
 from fastapi import FastAPI, Depends, HTTPException, Query, status
-from auth import get_current_user
+from auth import get_current_user, admin_required
 from auth_routes import router as auth_router
 from models_user import User
 from fastapi.middleware.cors import CORSMiddleware
@@ -81,7 +81,7 @@ def crear_categoria(data: CategoriaCreate, db: Session = Depends(get_db), curren
     return cat
 
 @app.delete("/categorias/{categoria_id}", status_code=status.HTTP_204_NO_CONTENT, tags=["Categorías"])
-def eliminar_categoria(categoria_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def eliminar_categoria(categoria_id: int, db: Session = Depends(get_db), current_user: User = Depends(admin_required)):
     """Elimina una categoría (solo si no tiene productos asociados)."""
     cat = db.query(Categoria).filter(Categoria.id == categoria_id).first()
     if not cat:
@@ -143,7 +143,7 @@ def crear_producto(data: ProductoCreate, db: Session = Depends(get_db), current_
     return prod
 
 @app.put("/productos/{producto_id}", response_model=ProductoResponse, tags=["Productos"])
-def actualizar_producto(producto_id: int, data: ProductoUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def actualizar_producto(producto_id: int, data: ProductoUpdate, db: Session = Depends(get_db), current_user: User = Depends(admin_required)):
     """Actualiza un producto existente."""
     prod = db.query(Producto).filter(Producto.id == producto_id).first()
     if not prod:
@@ -162,7 +162,7 @@ def actualizar_producto(producto_id: int, data: ProductoUpdate, db: Session = De
     return prod
 
 @app.delete("/productos/{producto_id}", status_code=status.HTTP_204_NO_CONTENT, tags=["Productos"])
-def eliminar_producto(producto_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def eliminar_producto(producto_id: int, db: Session = Depends(get_db), current_user: User = Depends(admin_required)):
     prod = db.query(Producto).filter(Producto.id == producto_id).first()
     if not prod:
         raise HTTPException(status_code=404, detail="Producto no encontrado")
@@ -170,7 +170,7 @@ def eliminar_producto(producto_id: int, db: Session = Depends(get_db), current_u
     db.commit()
 
 @app.patch("/productos/{producto_id}/desactivar", response_model=ProductoResponse, tags=["Productos"])
-def desactivar_producto(producto_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def desactivar_producto(producto_id: int, db: Session = Depends(get_db), current_user: User = Depends(admin_required)):
     prod = db.query(Producto).filter(Producto.id == producto_id).first()
     if not prod:
         raise HTTPException(status_code=404, detail="Producto no encontrado")
@@ -180,7 +180,7 @@ def desactivar_producto(producto_id: int, db: Session = Depends(get_db), current
     return prod
 
 @app.patch("/productos/{producto_id}/activar", response_model=ProductoResponse, tags=["Productos"])
-def activar_producto(producto_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def activar_producto(producto_id: int, db: Session = Depends(get_db), current_user: User = Depends(admin_required)):
     prod = db.query(Producto).filter(Producto.id == producto_id).first()
     if not prod:
         raise HTTPException(status_code=404, detail="Producto no encontrado")
